@@ -32,10 +32,7 @@ class UsersController extends Controller
         return view('users.create');
     }
 
-    public function show(User $user)
-    {
-        return view('users.show', compact('user'));
-    }
+
 
     public function store(Request $request)
     {
@@ -90,5 +87,12 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success', '成功删除用户！');
         return back();
+    }
+
+    public function show(User $user){
+        $statuses = $user->statuses()
+            ->orderBy('created_at','desc')
+            ->paginate(10);
+        return view('users.show',compact('user','statuses'));
     }
 }
